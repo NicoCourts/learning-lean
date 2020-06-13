@@ -76,7 +76,15 @@ example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) := iff.intro
 (λ x : (p ∧ q) ∧ r, and.intro x.1.1 (and.intro x.1.2 x.2))
 (λ x : p ∧ (q ∧ r), and.intro (and.intro x.1 x.2.1) x.2.2)
 
-example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) := sorry
+example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) := iff.intro
+(λ x : (p ∨ q) ∨ r, or.elim x 
+  (λ y : p ∨ q, or.elim y or.inl (λ z : q, or.inr (or.inl z)))
+  (λ y : r, or.intro_right p (or.intro_right q y))
+)
+(λ x : p ∨ (q ∨ r), or.elim x 
+  (λ y : p, or.intro_left r (or.intro_left q y))
+  (λ y : q ∨ r, or.elim y (λ z : q, or.inl (or.inr z)) or.inr)
+)
 
 -- distributivity
 example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := sorry
